@@ -53,7 +53,7 @@ struct MenuView: View {
                     
                     HStack {
                         Text(name)
-                        Text("\(price)")
+                        Text(price, format: .number.precision(.fractionLength(0...2)))
                     }
                 }
             }
