@@ -11,8 +11,8 @@ struct MenuView: View {
     //dictionary
     let menuItems = [
         "Pizza": 9.99,
-        "Pasta": 10.50,
-        "Salad": 8.00,
+        "Pasta": 10.55,
+        "Salad": 8.55,
         "Soup": 7.75,
         "Steak": 12.25,
         "Chicken": 6.25,
@@ -27,7 +27,7 @@ struct MenuView: View {
     var body: some View {
         
         let sortedMenu = menuItems.sorted {
-            $0.value < $1.value
+            $0.key < $1.key
         }
         
         
