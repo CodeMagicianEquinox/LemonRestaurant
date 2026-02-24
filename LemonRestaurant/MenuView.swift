@@ -5,11 +5,26 @@
 //  Created by Timothy Terrance on 2/21/26.
 //
 
+
+
+/*
+ COMPUTED PROPERTIES --> used to recalculate the number of items in a cart
+ - Does not store a value
+ - Each access recomputes the value
+ 
+ SYNTAX
+ var propertyName: Type {
+    return a calculated value
+ */
+
+
 import SwiftUI
 
 struct MenuView: View {
-    //dictionary
-    let menuItems = [
+    //dictionary is special variables
+    let menuItems: [String:Double] = [
+        // key:value -> official name
+        // name:price -> nicknames
         "Pizza": 9.99,
         "Pasta": 10.55,
         "Salad": 8.55,
@@ -24,50 +39,67 @@ struct MenuView: View {
         menuItems.count
     }
     
+    
+    var sortedMenu: [(name:String, price:Double)] {
+        menuItems
+            .sorted { $0.key < $1.key}
+            .map {(name:$0.key, price:$0.value)}
+    }
+    
+    //    func getHighestPrice () -> Double {
+    //        var highest = 0.0
+    //        for item in SortedMenu
+    //            if item.price > highest {
+    //                highest = item.price
+    //
+    //        }
+    //    }
+    //        return highest
+    
+    /*
+     [
+     
+     (name:"Pizza", price: 9.99),
+     (name: "Pasta", price: 10.50)
+     
+     ]
+     */
+    
     var body: some View {
-        
-        let sortedMenu = menuItems.sorted {
-            $0.key < $1.key
-        }
-        
-        
-        
-        
-        // what the user see goes here
-        VStack{
-            VStack{
-                //header
+        // what the user sees goes here
+        VStack(spacing: 16) {
+            // Header
+            VStack(spacing: 8) {
                 Image("beautiful restaurant image")
                     .resizable()
                     .scaledToFit()
-                    .frame(height:50)
+                    .frame(height: 50)
                 Text("Today's menu")
                     .font(.title2)
                     .bold()
-                
             }
-            
+
+            // Single list showing menu items
             List {
-                ForEach(sortedMenu, id: \.key){
-                    name, price in
-                    
+                ForEach(sortedMenu, id: \.name) { item in
                     HStack {
-                        Text(name)
-                        Text(price, format: .number.precision(.fractionLength(0...2)))
+                        Text(item.name)
+                        Spacer()
+                        Text(item.price, format: .number.precision(.fractionLength(0...2)))
                     }
                 }
             }
-            
-            Section{
-                VStack{
-                    Text("Total items: \(getTotalItems())")
-                }
-            }
-            
+            .listStyle(.plain)
+
+            // Footer
+            Text("Total items: \\ (getTotalItems())")
+                .font(.footnote)
+                .foregroundStyle(.secondary)
         }
+        .padding()
     }
 }
-
 #Preview {
     MenuView()
 }
+
