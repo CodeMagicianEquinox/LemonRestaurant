@@ -80,19 +80,21 @@ struct MenuView: View {
             }
 
             // Single list showing menu items
-            List {
-                ForEach(sortedMenu, id: \.name) { item in
-                    HStack {
-                        Text(item.name)
-                        Spacer()
-                        Text(item.price, format: .number.precision(.fractionLength(0...2)))
+            Section {
+                List {
+                    ForEach(sortedMenu, id: \.name) { item in
+                        HStack {
+                            Text(item.name)
+                            Spacer()
+                            Text(item.price, format: .number.precision(.fractionLength(0...2)))
+                        }
                     }
                 }
+                .listStyle(.plain)
             }
-            .listStyle(.plain)
 
             // Footer
-            Text("Total items: \\ (getTotalItems())")
+            Text("Total items: \(getTotalItems())")
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
