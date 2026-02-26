@@ -21,6 +21,8 @@
 import SwiftUI
 
 struct MenuView: View {
+    @State private var showDesserts = false
+    
     //dictionary is special variables
     let menuItems: [String:Double] = [
         // key:value -> official name
@@ -74,10 +76,15 @@ struct MenuView: View {
                     .resizable()
                     .scaledToFit()
                     .frame(height: 50)
-                Text("Today's menu")
+                Text("Today's Menu")
                     .font(.title2)
                     .bold()
             }
+            
+            Button("View Desserts") {
+                showDesserts = true
+            }
+            .foregroundColor(.black)
 
             // Single list showing menu items
             Section {
@@ -99,9 +106,12 @@ struct MenuView: View {
                 .foregroundStyle(.secondary)
         }
         .padding()
+        .sheet(isPresented: $showDesserts) {
+            DessertView()
+        }
     }
 }
+
 #Preview {
     MenuView()
 }
-
