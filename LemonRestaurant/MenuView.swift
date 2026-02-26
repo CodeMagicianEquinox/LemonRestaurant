@@ -104,30 +104,13 @@ struct MenuView: View {
                 showDesserts = true
             }
             .foregroundColor(.black)
-            .sheet(isPresented:$showDesserts){
-                DessertView()
-            }
             .padding()
             .background(Color.green.opacity(0.2))
             .cornerRadius(10)
             
-//            List{
-//                ForEach(displayMenu, id:\.name){ item in
-//                    HStack{ }
-//                }
-                
-                // Single list showing menu items
-                Section {
-                    List {
-                        ForEach(displayMenu, id: \.name) { item in
-                            HStack {
-                                Text(item.name)
-                                Spacer()
-                                Text(item.price, format: .number.precision(.fractionLength(0...2)))
-                            }
-                        }
-                    }
-                    .listStyle(.plain)
+            List {
+                ForEach(displayMenu, id: \.name) { item in
+                    MenuItemRowView(name: item.name, price: item.price)
                 }
                 
                 // Footer
@@ -141,7 +124,8 @@ struct MenuView: View {
             }
         }
     }
-
-#Preview {
+}
+#Preview("MenuView") {
     MenuView()
 }
+
