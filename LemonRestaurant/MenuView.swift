@@ -22,6 +22,8 @@ import SwiftUI
 
 struct MenuView: View {
     @State private var showDesserts = false
+    @State private var showMessage = false
+    @State private var showAffordableOnly = false
     
     //dictionary is special variables
     let menuItems: [String:Double] = [
@@ -38,10 +40,10 @@ struct MenuView: View {
     ]
     
     func getTotalItems() -> Int{
-        menuItems.count
+        displayMenu.count
     }
     
-    
+    //Computed property 1
     var sortedMenu: [(name:String, price:Double)] {
         menuItems
             .sorted { $0.key < $1.key}
@@ -67,6 +69,15 @@ struct MenuView: View {
      ]
      */
     
+    //Computed property 2
+    var displayMenu:[(name:String, price:Double)]{
+        if showAffordableOnly {
+            return sortedMenu.filter { $0.price < 6 }
+        }else{
+            return sortedMenu
+        }
+    }
+    
     var body: some View {
         // what the user sees goes here
         VStack(spacing: 16) {
@@ -81,36 +92,55 @@ struct MenuView: View {
                     .bold()
             }
             
-            Button("View Desserts") {
+            VStack{
+                Toggle("Show message", isOn: $showMessage)
+                Toggle("Show affordable menu", isOn: $showAffordableOnly)
+            }
+            if showMessage {
+                Text("Welcome to little lemon")
+            }
+            
+            Button("View Desserts"){
                 showDesserts = true
             }
             .foregroundColor(.black)
-
-            // Single list showing menu items
-            Section {
-                List {
-                    ForEach(sortedMenu, id: \.name) { item in
-                        HStack {
-                            Text(item.name)
-                            Spacer()
-                            Text(item.price, format: .number.precision(.fractionLength(0...2)))
+            .sheet(isPresented:$showDesserts){
+                DessertView()
+            }
+            .padding()
+            .background(Color.green.opacity(0.2))
+            .cornerRadius(10)
+            
+//            List{
+//                ForEach(displayMenu, id:\.name){ item in
+//                    HStack{ }
+//                }
+                
+                // Single list showing menu items
+                Section {
+                    List {
+                        ForEach(displayMenu, id: \.name) { item in
+                            HStack {
+                                Text(item.name)
+                                Spacer()
+                                Text(item.price, format: .number.precision(.fractionLength(0...2)))
+                            }
                         }
                     }
+                    .listStyle(.plain)
                 }
-                .listStyle(.plain)
+                
+                // Footer
+                Text("Total items: \(getTotalItems())")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
-
-            // Footer
-            Text("Total items: \(getTotalItems())")
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-        }
-        .padding()
-        .sheet(isPresented: $showDesserts) {
-            DessertView()
+            .padding()
+            .sheet(isPresented: $showDesserts) {
+                DessertView()
+            }
         }
     }
-}
 
 #Preview {
     MenuView()
