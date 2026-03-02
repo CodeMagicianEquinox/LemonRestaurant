@@ -110,7 +110,7 @@ struct MenuView: View {
             
             List {
                 ForEach(displayMenu, id: \.name) { item in
-                    MenuItemRowView(name: item.name, price: item.price)
+                    MenuItemRowView(name: item.name, price: item.price, isDessert: false)
                 }
                 
                 // Footer
